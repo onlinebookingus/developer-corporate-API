@@ -76,21 +76,21 @@ module.exports = {
 
 
     user: {
-        profile: 'select name, email, reward from booking_and_reservation.user where user_id=?',
+        profile: 'select name, email, reward from heroku_e18be060a62c305.user where user_id=?',
         checkEmailExists: 'select * from user where email=?',
-        checkUserNameExists: 'select user_id from booking_and_reservation.user where name=?',
-        create: 'insert into booking_and_reservation.user (user_id,name,password,email) values (null,?,?,?)',
+        checkUserNameExists: 'select user_id from heroku_e18be060a62c305.user where name=?',
+        create: 'insert into heroku_e18be060a62c305.user (user_id,name,password,email) values (null,?,?,?)',
         session: 'select LAST_INSERT_ID() as user_id ',
-        authenticate: 'select user_id, password from booking_and_reservation.user where email=?',
-        getAvailableRewardsIgnoringTransaction: 'SELECT sum(R.change) as sum FROM booking_and_reservation.reward R where user_id=? and date_active <= curdate() and (transaction_id != ? or transaction_id is NULL);',
-        getBookingForTransaction:'SELECT * FROM booking_and_reservation.booking WHERE transaction_id=?',
+        authenticate: 'select user_id, password from heroku_e18be060a62c305.user where email=?',
+        getAvailableRewardsIgnoringTransaction: 'SELECT sum(R.change) as sum FROM heroku_e18be060a62c305.reward R where user_id=? and date_active <= curdate() and (transaction_id != ? or transaction_id is NULL);',
+        getBookingForTransaction:'SELECT * FROM heroku_e18be060a62c305.booking WHERE transaction_id=?',
         edit: 'UPDATE user SET name=?, password=? WHERE user_id=?',
         changepass: 'UPDATE user SET password = ? WHERE email = ?',
         searchEmail: 'SELECT * FROM user WHERE email = ?',
         getEmailwithID: 'SELECT email FROM user WHERE user_id = ?',
         getAccessCode: 'SELECT access_code FROM user WHERE email = ?',
         setAccessCode: 'UPDATE user SET access_code = ? WHERE email = ?',
-        getAvailableRewards: 'SELECT sum(R.change) as rewards FROM booking_and_reservation.reward R where user_id=? and date_active <= curdate()',
+        getAvailableRewards: 'SELECT sum(R.change) as rewards FROM heroku_e18be060a62c305.reward R where user_id=? and date_active <= curdate()',
         userProfileChangePass: 'UPDATE user SET password = ? WHERE user_id = ?',
         getOldPass: 'SELECT password FROM user where user_id =?',
         setNewName: 'UPDATE user SET name=? WHERE user_id=?'
@@ -147,7 +147,7 @@ module.exports = {
       var dateConditions = []
       let tempTableComponent = `with 
             rb as (SELECT  B.*, R.hotel_id, R.room_number, R.price, R.bed_type
-            from booking_and_reservation.booking B join booking_and_reservation.room R 
+            from heroku_e18be060a62c305.booking B join heroku_e18be060a62c305.room R 
             on B.room_id = R.room_id `
 
       // Date Conditions
@@ -376,7 +376,7 @@ module.exports = {
       var withConditions = []
       let tempTableComponent = `with 
           rb as (SELECT  B.*, R.hotel_id, R.room_number, R.price, R.bed_type
-          from booking_and_reservation.booking B join booking_and_reservation.room R 
+          from heroku_e18be060a62c305.booking B join heroku_e18be060a62c305.room R 
           on B.room_id = R.room_id `
 
       // Date Conditions
@@ -531,7 +531,7 @@ module.exports = {
 
   booking: {
 
-    book: 'INSERT INTO booking_and_reservation.booking(booking_id, user_id, guest_id, room_id, total_price, cancellation_charge, date_in, date_out, status, amount_paid) values (null, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    book: 'INSERT INTO heroku_e18be060a62c305.booking(booking_id, user_id, guest_id, room_id, total_price, cancellation_charge, date_in, date_out, status, amount_paid) values (null, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
     cancel: 'UPDATE booking SET status="cancelled" WHERE booking_id=?',
     modify: 'UPDATE booking SET room_id=?, date_in=?, date_out=? WHERE booking_id=?',
     view: `SELECT transaction.*, room.*, hotel.name
@@ -546,7 +546,7 @@ module.exports = {
      * 
      * @returns placeholder query to insert into transaction table
      */
-    makeTransaction: 'INSERT INTO booking_and_reservation.transaction(transaction_id, user_id, guest_id, total_price, cancellation_charge, date_in, date_out, status, amount_paid, stripe_id) values (null, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    makeTransaction: 'INSERT INTO heroku_e18be060a62c305.transaction(transaction_id, user_id, guest_id, total_price, cancellation_charge, date_in, date_out, status, amount_paid, stripe_id) values (null, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
 
     /**
      * Insert into transaction_room table
@@ -556,10 +556,10 @@ module.exports = {
      * @param {Number} rooms_booked[].price
      * @param {Number} rooms_booked[].desired_quantity
      * @param {Number[]} rooms_booked[].room_ids
-     * @returns A formatted query ie "INSERT INTO booking_and_reservation.transaction_room(transaction_id, room_id, room_price) VALUES (39,10,20),(39,11,65)"
+     * @returns A formatted query ie "INSERT INTO heroku_e18be060a62c305.transaction_room(transaction_id, room_id, room_price) VALUES (39,10,20),(39,11,65)"
      */
     makeTransactionDetails: function (transaction_id, rooms_booked) {
-      let insertStatement = "INSERT INTO booking_and_reservation.transaction_room(transaction_id, room_id, room_price) VALUES "
+      let insertStatement = "INSERT INTO heroku_e18be060a62c305.transaction_room(transaction_id, room_id, room_price) VALUES "
       let placeholders = []
       let values = []
       for (i = 0; i < rooms_booked.length; i++) {
@@ -580,24 +580,24 @@ module.exports = {
       let placeholderComponent = placeholders.join(",")
       return mysql.format(insertStatement + placeholderComponent, values)
     },
-    book: 'INSERT INTO booking_and_reservation.booking(booking_id, user_id, guest_id, room_id, total_price, cancellation_charge, date_in, date_out, status, amount_paid) values (null, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    book: 'INSERT INTO heroku_e18be060a62c305.booking(booking_id, user_id, guest_id, room_id, total_price, cancellation_charge, date_in, date_out, status, amount_paid) values (null, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
     cancel: 'UPDATE booking SET status="cancelled" WHERE booking_id=?',
     modify: 'UPDATE booking SET room_id=?, date_in=?, date_out=? WHERE booking_id=?',
     removeTransactionRoomDataForTransaction: '',
 
     //For when the user cancels the entire transaction
-    cancel_transaction: 'UPDATE booking_and_reservation.transaction SET status="cancelled" WHERE transaction_id=?',
-    cancel_all: 'DELETE from booking_and_reservation.transaction_room where transaction_id=?',
+    cancel_transaction: 'UPDATE heroku_e18be060a62c305.transaction SET status="cancelled" WHERE transaction_id=?',
+    cancel_all: 'DELETE from heroku_e18be060a62c305.transaction_room where transaction_id=?',
     // For when the user cancels only a single room
-    cancel_one: 'DELETE from booking_and_reservation.transaction_room where transaction_id=? AND room_id=?',
-    cancel_one_room: 'UPDATE booking_and_reservation.transaction SET total_price=?, cancellation_charge=?, amount_paid=? WHERE transaction_id=?',
+    cancel_one: 'DELETE from heroku_e18be060a62c305.transaction_room where transaction_id=? AND room_id=?',
+    cancel_one_room: 'UPDATE heroku_e18be060a62c305.transaction SET total_price=?, cancellation_charge=?, amount_paid=? WHERE transaction_id=?',
     user_id: 'SELECT * FROM transaction WHERE transaction_id=?',
     room_price: 'SELECT * FROM transaction_room WHERE transaction_id=? AND room_id=?',
     getHotel_Info: 'SELECT DISTINCT e.name, e.address, e.city, e.state, e.hotel_id FROM transaction b, transaction_room c, room d, hotel e WHERE b.transaction_id = ? and b.transaction_id = c.transaction_id and c.room_id = d.room_id and d.hotel_id = e.hotel_id',
 
     //When query is ran -> returns an array that cannot be cancelled, else returns an empty array which means can be cancelled
     isCancellable: function ({ transaction_id }) {
-      let query = `SELECT * FROM booking_and_reservation.transaction WHERE
+      let query = `SELECT * FROM heroku_e18be060a62c305.transaction WHERE
                     transaction_id = ? AND date_in < CURDATE() AND status != 'cancelled';`
 
       return mysql.format(query, [transaction_id])
@@ -606,7 +606,7 @@ module.exports = {
     //When ran -> returns an array that cannot be MODIFIED, else returns an empty array 
     //meaning the booking can be modified
     isModifiable: function ({ booking_id }) {
-      let query = `SELECT * FROM booking_and_reservation.transaction WHERE
+      let query = `SELECT * FROM heroku_e18be060a62c305.transaction WHERE
                     booking_id = ? 
                     AND date_in <= CURDATE() 
                     AND date_out >= CURDATE() 
@@ -619,7 +619,7 @@ module.exports = {
     // When ran -> returns an array with the selected result(s), else array is empty and isBookable is
     // ran for modifyAvailabilityCheck in reservation.js
     isOldBookingIdAndRoomId: function ({ transaction_id, room_id }) {
-      let query = `SELECT * FROM booking_and_reservation.transaction WHERE
+      let query = `SELECT * FROM heroku_e18be060a62c305.transaction WHERE
                     booking_id = ? 
                     AND room_id = ?  
                     AND status = 'booked';`
@@ -684,7 +684,7 @@ module.exports = {
       SELECT 
         distinct(B.room_id)
       FROM
-          booking_and_reservation.booking B
+          heroku_e18be060a62c305.booking B
       WHERE
           date_in < ?
               AND date_out > ?
@@ -758,7 +758,7 @@ module.exports = {
       //     (SELECT DISTINCT
       //         (room_id) AS B_room_id
       //     FROM
-      //         booking_and_reservation.booking B
+      //         heroku_e18be060a62c305.booking B
       //     WHERE
       //         date_in < '2019-03-21'
       //             AND date_out > '2019-03-02'
@@ -802,7 +802,7 @@ module.exports = {
           (SELECT DISTINCT
               (room_id) AS B_room_id
           FROM
-              booking_and_reservation.booking B
+              heroku_e18be060a62c305.booking B
           WHERE
               date_in < ?
                   AND date_out > ?
@@ -877,7 +877,7 @@ module.exports = {
       //     (SELECT DISTINCT
       //         (room_id) AS B_room_id
       //     FROM
-      //         booking_and_reservation.booking B
+      //         heroku_e18be060a62c305.booking B
       //     WHERE
       //         date_in < '2019-03-21'
       //             AND date_out > '2019-03-02'
@@ -923,7 +923,7 @@ module.exports = {
         (SELECT DISTINCT
             (room_id) AS B_room_id
         FROM
-            booking_and_reservation.booking B
+            heroku_e18be060a62c305.booking B
         WHERE
             date_in < ?
                 AND date_out > ?
@@ -988,8 +988,8 @@ module.exports = {
               NOT EXISTS( SELECT 
                           *
                       FROM
-                          booking_and_reservation.booking B
-                      JOIN booking_and_reservation.room R ON B.room_id = R.room_id
+                          heroku_e18be060a62c305.booking B
+                      JOIN heroku_e18be060a62c305.room R ON B.room_id = R.room_id
                       WHERE
                           date_in < ?
                               AND date_out > ?
@@ -997,7 +997,7 @@ module.exports = {
                               AND R.room_id = ?) AS available
           ) AS availability
               JOIN
-          booking_and_reservation.room
+          heroku_e18be060a62c305.room
       WHERE
           room_id = ?
       ;
@@ -1024,21 +1024,21 @@ module.exports = {
   },
 
     rewards: {
-      book: 'INSERT INTO booking_and_reservation.rewards(reward_book_id, user_id, room_id, reward_points, no_cancellation, date_in, date_out, status) values (null, ?, ?, ?, ?, ?, ?, ?)',
-      book: 'INSERT INTO booking_and_reservation.rewards (reward_book_id, user_id, room_id, reward_points, no_cancellation, date_in, date_out, status) values (null, ?, ?, ?, ?, ?, ?, ?)',
-      useOnBooking: 'INSERT INTO booking_and_reservation.reward (reward_id, user_id, reward_reason_id, transaction_id, date_active, `change`) values (null, ?, 1, ?, curdate(), ?)',
-      gainFromBooking: 'INSERT INTO booking_and_reservation.reward (reward_id, user_id, reward_reason_id, transaction_id, date_active, `change`) values (null, ?, 2, ?, ?, ?)',
-      getUserRecords: 'SELECT R.*,RR.reason FROM booking_and_reservation.reward R join booking_and_reservation.reward_reason RR on R.reward_reason_id = RR.reward_reason_id WHERE user_id=?',
-      cancelBooking: 'DELETE from booking_and_reservation.reward where transaction_id=?',
-      getOldBookingAppliedRewards: 'SELECT R.change FROM booking_and_reservation.reward R WHERE transaction_id = ? AND SIGN(R.change) = -1',
-      getAppliedRewards: 'SELECT R.change FROM booking_and_reservation.reward R WHERE transaction_id = ? AND user_id = ? AND SIGN(R.change) = -1',
+      book: 'INSERT INTO heroku_e18be060a62c305.rewards(reward_book_id, user_id, room_id, reward_points, no_cancellation, date_in, date_out, status) values (null, ?, ?, ?, ?, ?, ?, ?)',
+      book: 'INSERT INTO heroku_e18be060a62c305.rewards (reward_book_id, user_id, room_id, reward_points, no_cancellation, date_in, date_out, status) values (null, ?, ?, ?, ?, ?, ?, ?)',
+      useOnBooking: 'INSERT INTO heroku_e18be060a62c305.reward (reward_id, user_id, reward_reason_id, transaction_id, date_active, `change`) values (null, ?, 1, ?, curdate(), ?)',
+      gainFromBooking: 'INSERT INTO heroku_e18be060a62c305.reward (reward_id, user_id, reward_reason_id, transaction_id, date_active, `change`) values (null, ?, 2, ?, ?, ?)',
+      getUserRecords: 'SELECT R.*,RR.reason FROM heroku_e18be060a62c305.reward R join heroku_e18be060a62c305.reward_reason RR on R.reward_reason_id = RR.reward_reason_id WHERE user_id=?',
+      cancelBooking: 'DELETE from heroku_e18be060a62c305.reward where transaction_id=?',
+      getOldBookingAppliedRewards: 'SELECT R.change FROM heroku_e18be060a62c305.reward R WHERE transaction_id = ? AND SIGN(R.change) = -1',
+      getAppliedRewards: 'SELECT R.change FROM heroku_e18be060a62c305.reward R WHERE transaction_id = ? AND user_id = ? AND SIGN(R.change) = -1',
       getCurrentRewardsHistory: 'SELECT a.reward_id, a.transaction_id, a.date_active, a.change, b.reason FROM reward a, reward_reason b where a.reward_reason_id = b.reward_reason_id and user_id = ? and date_active <= curdate()',
       getFutureRewardsHistory: 'SELECT a.reward_id, a.transaction_id, a.date_active, a.change, b.reason FROM reward a, reward_reason b where a.reward_reason_id = b.reward_reason_id and user_id = ? and date_active >= curdate()',    
       getRewardsHistory: 'SELECT DISTINCT a.transaction_id, a.date_active, a.change, b.date_in, b.date_out, e.name FROM reward a, transaction b, transaction_room c, room d, hotel e WHERE a.transaction_id = b.transaction_id and a.user_id = ? and a.transaction_id = c.transaction_id and c.room_id = d.room_id and d.hotel_id = e.hotel_id'
     },
 
   guest: {
-    insert: 'INSERT INTO booking_and_reservation.guest(guest_id, email, name) values (null, ?, ?)'
+    insert: 'INSERT INTO heroku_e18be060a62c305.guest(guest_id, email, name) values (null, ?, ?)'
   },
   modify: {
     removeTransactionRoomDataAndRewardsForTransaction: `
@@ -1049,7 +1049,7 @@ module.exports = {
       WHERE
       TR.transaction_id = ?
       `,
-    updateTransaction: 'UPDATE booking_and_reservation.transaction SET total_price=?, cancellation_charge=?, date_in=?, date_out=?, status=?, amount_paid=?, stripe_id=? WHERE transaction_id=?',
+    updateTransaction: 'UPDATE heroku_e18be060a62c305.transaction SET total_price=?, cancellation_charge=?, date_in=?, date_out=?, status=?, amount_paid=?, stripe_id=? WHERE transaction_id=?',
     getExistingTransaction: `
       SELECT B.transaction_id, group_concat(B.transaction_room_id) as transaction_room_ids, B.user_id, B.guest_id, B.total_price , B.cancellation_charge, ANY_VALUE(B.date_in) as date_in, ANY_VALUE(B.date_out) as date_out, B.status, B.amount_paid, B.stripe_id, B.room_price,
       R.bed_type, group_concat( distinct(url) ) as images, count(R.room_id) as quantity, group_concat(R.room_id) as room_ids FROM booking_and_reservation.booking B
@@ -1065,7 +1065,7 @@ module.exports = {
   },
   email:{
       getHotelInfo: (hotelID)=>{
-        let q1 = 'select * from booking_and_reservation.hotel where hotel_id = ?'
+        let q1 = 'select * from heroku_e18be060a62c305.hotel where hotel_id = ?'
         let query = mysql.format(q1, hotelID)
         return query
       }
@@ -1084,12 +1084,12 @@ module.exports = {
                   ANY_VALUE(T.amount_paid) as amount_paid, ANY_VALUE(T.stripe_id) as stripe_id, 
                   ANY_VALUE(TR.room_price) as room_price, ANY_VALUE(R.hotel_id) as hotel_id, group_concat(R.room_number), R.bed_type, ANY_VALUE(R.capacity) as capacity, ANY_VALUE(RI.url) as image,
                   COUNT(T.transaction_id) as quantity
-                  FROM booking_and_reservation.transaction T
-                  join booking_and_reservation.transaction_room TR
+                  FROM heroku_e18be060a62c305.transaction T
+                  join heroku_e18be060a62c305.transaction_room TR
                   on T.transaction_id = TR.transaction_id
-                  join booking_and_reservation.room R
+                  join heroku_e18be060a62c305.room R
                   on TR.room_id = R.room_id
-                  join booking_and_reservation.room_image RI
+                  join heroku_e18be060a62c305.room_image RI
                   on RI.bed_type = R.bed_type AND RI.hotel_id = R.hotel_id
                   where T.transaction_id = ?
                   group by R.bed_type, R.price;`
