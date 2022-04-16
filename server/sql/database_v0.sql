@@ -1,5 +1,5 @@
-create database spartanhotel;
-use spartanhotel;
+create database booking_and_reservation;
+use booking_and_reservation;
 
 CREATE TABLE hotel (
     hotel_id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -58,5 +58,5 @@ CREATE TABLE hotel_image (
     url varchar(255)
 );
 
-GRANT ALL PRIVILEGES ON spartanhotel.*  TO 'cmpe165'@'localhost';
+GRANT ALL PRIVILEGES ON booking_and_reservation.*  TO 'onlinebookingus'@'localhost';
 FLUSH PRIVILEGES;
