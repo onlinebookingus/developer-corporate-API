@@ -1,8 +1,8 @@
 let config = {
-    host:'localhost',
+    host:'18.212.89.39',
     user:'onlinebookingus',
-    password:'onlinebookingus',
-    database:'booking_and_reservation'
+    password:'Online@2022',
+    database:'booking'
 }
 
 module.exports = config
