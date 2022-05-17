@@ -1,5 +1,5 @@
 let config = {
-    host:'3.87.190.252',
+    host:'34.224.90.64',
     user:'onlinebookingus',
     password:'Online@2022',
     database:'booking'
